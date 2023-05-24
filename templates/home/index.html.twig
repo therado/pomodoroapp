@@ -1,43 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello WelcomeController!{% endblock %}
+{% block title %}Main Page{% endblock %}
 
 {% block body %}
-<nav class="flex justify-center space-x-4">
-  <a href="#" class="text-3xl font-bold text-gray-900 mb-6">Home</a>
-  <a href="#" class="text-3xl font-bold text-gray-900 mb-6">Information</a>
-  <a href="#" class="text-3xl font-bold text-gray-900 mb-6">Information</a>
-</nav>
-
-<main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-  <div class="px-4 py-6 sm:px-0">
-    <h1 class="text-3xl font-bold text-gray-900 mb-6">Witaj w Pomodoro App</h1>
-
-    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-      {% for message in app.flashes('danger') %}
-        <div class="alert alert-danger">
-          {{ message }}
-        </div>
-      {% endfor %}
-
-      <form action="{{ path('app_discord_connect') }}" method="post">
-        <input type="hidden" name="token" value="{{ csrf_token('discord-auth') }}" />
-        <h1 class="h1 mb-2 fw-normal">Authentication</h1>
-
-        <button class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900" type="submit">Connect with Discord</button>
-      </form>
-
-    {% else %}
-
-      <div class="card" style="width: 14rem;">
-        <img src="{{ app.user.avatarUrl }}" class="card-img-top">
-        <div class="card-body">
-          <h5 class="card-title">{{ app.user.username }}</h5>
-          <a href="{{ path('app_logout') }}" class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Logout</a>
-        </div>
-      </div>
-
-    {% endif %}
-  </div>
-</main>
+{{ include('home/_navbar.html.twig') }}
 {% endblock %}

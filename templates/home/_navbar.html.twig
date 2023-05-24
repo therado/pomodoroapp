@@ -1,0 +1,18 @@
+<nav class="flex justify-between p-4 bg-white shadow-md">
+  <div class="flex items-center">
+    <!--<img src="#" alt="Logo" class="w-8 h-8 mr-3">-->
+    <span class="text-sm font-medium text-gray-900">POMODORO APP</span>
+  </div>
+
+  <div class="flex items-center">
+    <a href="#" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Home</a>
+    <a href="#" class="mr-4 text-sm text-gray-600 hover:text-gray-900">My Skills</a>
+    <a href="#" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Send a Bug</a>
+    <div class="relative">
+      <button type="button" class="flex items-center focus:outline-none">
+        <img src="{{ app.user.avatarUrl }}" alt="Avatar" class="w-6 h-6 rounded-full">
+        <span class="sr-only">{{ app.user.username }}</span>
+      </button>
+    </div>
+  </div>
+</nav>
