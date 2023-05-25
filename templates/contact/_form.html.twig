@@ -1,0 +1,75 @@
+<div class="w-full md:w-2/3 mx-auto mb-4 flex justify-between items-center p-4 bg-white shadow-md">
+
+  <!-- Section: Design Block -->
+  <section class="mb-32 text-gray-800">
+    <div class="flex flex-wrap">
+    
+      <div class="grow-0 shrink-0 basis-auto mb-12 md:mb-0 w-full md:w-7/12 px-3 lg:px-6">
+        <h2 class="text-3xl font-bold mb-6">Frequently asked questions</h2>
+        <p class="font-bold mb-2">Will this application be developed with a mobile application ?</p>
+        <p class="text-gray-500 mb-6 mr-10">
+          Yes, we plan to develop this application with a mobile version in
+          the near future. Of course, this will require some time and resources,
+          but work on it has not yet begun. We will keep you updated on the progress
+          of our work and encourage you to follow our announcements.
+        </p>
+        <p class="font-bold mb-2">Will this application be paid ?</p>
+        <p class="text-gray-500 mb-6 mr-10">
+          This application will <b>never</b> be paid and will not have ads.
+          Our goal is to provide users with a free tool that will help
+          them achieve their goals easily and effectively. 
+          We don't want the use of our app to be burdened with costs or
+          intrusive ads that may interfere with use. In addition to this,
+          we are keen to ensure the security and privacy of users, which is our priority.
+        </p>
+        <p class="font-bold mb-2" style="display: flex; align-items: center;"> 
+          <span>More options </span>
+          <img style="transform: translateY(10px);" class="ml-2" width="24" height="24" src="https://img.icons8.com/nolan/64/down2--v2.png" alt="down2--v2"/>
+        </p>
+            <div>
+              <div>
+                <a href="https://discord.gg/nCSEr7eEXw">
+                  <div class="relative inline-flex items-center justify-center  mt-2 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0 dark:text-white">
+                          Technical Discord Server
+                        </span>
+                  </div>
+                </a>
+              </div>
+            </div>
+      </div>
+      <div class="grow-0 shrink-0 basis-auto w-full md:w-5/12 px-3 lg:px-6">
+        <p class="font-bold mb-6">Found an error or have a question? Contact us</p>
+          <div class="font-bold mb-6 flex items-center">
+            <img src="{{ app.user.avatarUrl }}" alt="Avatar" class="w-12 h-12 rounded-full mr-4">
+            <h2>{{ app.user.username }}</h2>
+          </div>
+          
+            {{ form_start(form) }}
+                    <div class="form-group mb-6">
+                        {{ form_label(form.title, 'Please enter the title', {'label_attr': {'class': 'mb-2 font-bold text-lg text-gray-700'}} )}}
+                        <div class="relative">
+                            {{ form_widget(form.title, {'attr': {'class': 'form-input block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none', 'id': 'inputContact','placeholder': 'Title theme' }})}}
+                        </div>
+                        {{ form_errors(form.title)}}
+                        </div>
+                    <div class="form-group mb-6">
+                      {{ form_label(form.description, 'Please enter a message', {'label_attr': {'class': 'mb-2 font-bold text-lg text-gray-700'}} )}}
+                      <div class="relative">
+                        {{ form_widget(form.description, {'attr': {'class': 'form-textarea resize-none rounded-md block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none', 'id': 'textAreaContact', 'rows': 8, 'placeholder': 'Message'}})}}
+                      </div>
+                      {{ form_errors(form.description)}}
+                    </div>
+                <div>
+                        <button class="relative inline-flex items-center justify-center p-0.5 mt-2 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0 dark:text-white">
+                        Send Message 
+                </span>
+            </button>
+        </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </section>
+
+</div>

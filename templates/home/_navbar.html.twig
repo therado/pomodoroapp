@@ -1,13 +1,13 @@
-<nav class="flex justify-between p-4 bg-white shadow-md">
+<nav class="w-full md:w-2/3 mx-auto mb-4 flex justify-between items-center p-4 bg-white shadow-md">
   <div class="flex items-center">
-    <!--<img src="#" alt="Logo" class="w-8 h-8 mr-3">-->
-    <span class="text-sm font-medium text-gray-900">POMODORO APP</span>
+    <img src="https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/clock.png" alt="Logo" class="w-8 h-8 mr-3 -ml-2">
+    <span class="text-lg font-medium text-gray-900">POMODORO APP</span>
   </div>
 
   <div class="flex items-center">
-    <a href="#" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Home</a>
+    <a href="{{ path('app_home') }}" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Home</a>
     <a href="#" class="mr-4 text-sm text-gray-600 hover:text-gray-900">My Skills</a>
-    <a href="#" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Send a Bug</a>
+    <a href="{{ path('app_contact') }}" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Contact</a>
     <div class="relative">
       <button type="button" class="flex items-center focus:outline-none">
         <img src="{{ app.user.avatarUrl }}" alt="Avatar" class="w-6 h-6 rounded-full">
