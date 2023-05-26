@@ -1,0 +1,20 @@
+<script type="text/javascript">
+$(document).ready(function() {
+  fetch('{{ path('api_pomodoro_sessions_list') }}')
+    .then(response => response.json())
+    .then(data => {
+      var sessions = data;
+      var html = sessions
+        .map(session => `<p>Session Length: ${session.sessionLength}, Break Length: ${session.breakLength}, Session Count: ${session.sessionCount}</p>`)
+        .join("");
+      $('#sessions').append(html);
+    })
+    .catch(error => {
+      console.error('An error occurred while fetching the session list:', error);
+    });
+});
+</script>
+
+
+
+<div id="sessions"></div>

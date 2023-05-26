@@ -18,6 +18,12 @@ class ContactController extends AbstractController
         Request $request,
         ContactRepository $contacs
     ): Response {
+        
+        //Check if user is authenticated
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
+        
         $form = $this->createForm(
             ContactFormType::class,
             new Contact()
