@@ -3,9 +3,9 @@ $(document).ready(function() {
   fetch('{{ path('api_pomodoro_sessions_list') }}')
     .then(response => response.json())
     .then(data => {
-      var sessions = data;
+      var sessions = data.filter(session => session.author === "{{ app.user.username }}");
       var html = sessions
-        .map(session => `<p>Session Length: ${session.sessionLength}, Break Length: ${session.breakLength}, Session Count: ${session.sessionCount}</p>`)
+        .map(session => `<p>Session Length: ${session.sessionLength}, Break Length: ${session.breakLength}, Session Count: ${session.sessionCount}, Author: ${session.author}</p>`)
         .join("");
       $('#sessions').append(html);
     })

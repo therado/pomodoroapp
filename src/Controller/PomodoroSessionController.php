@@ -37,6 +37,7 @@ class PomodoroSessionController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $sessionForm = $form->getData();
+            $sessionForm->setAuthor($this->getUser());
             $session->save($sessionForm, true);
     
             $this->addFlash('success', 'Your session has been created');

@@ -38,6 +38,17 @@ class PomodoroSessionRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    /**
+     * @return PomodoroSession[] Returns an array of PomodoroSession objects
+     */
+    public function findAllWithUser(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->addSelect('u')
+            ->leftJoin('p.author', 'u')
+            ->getQuery()
+            ->getResult();
+    }
 
 //    /**
 //     * @return PomodoroSession[] Returns an array of PomodoroSession objects

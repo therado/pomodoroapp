@@ -37,9 +37,13 @@ class User implements UserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Contact::class, orphanRemoval: true)]
     private Collection $contacts;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: PomodoroSession::class, orphanRemoval: true)]
+    private Collection $pomodoroSessions;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
+        $this->pomodoroSessions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,6 +178,36 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($contact->getAuthor() === $this) {
                 $contact->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PomodoroSession>
+     */
+    public function getPomodoroSessions(): Collection
+    {
+        return $this->pomodoroSessions;
+    }
+
+    public function addPomodoroSession(PomodoroSession $pomodoroSession): self
+    {
+        if (!$this->pomodoroSessions->contains($pomodoroSession)) {
+            $this->pomodoroSessions->add($pomodoroSession);
+            $pomodoroSession->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePomodoroSession(PomodoroSession $pomodoroSession): self
+    {
+        if ($this->pomodoroSessions->removeElement($pomodoroSession)) {
+            // set the owning side to null (unless already changed)
+            if ($pomodoroSession->getAuthor() === $this) {
+                $pomodoroSession->setAuthor(null);
             }
         }
 

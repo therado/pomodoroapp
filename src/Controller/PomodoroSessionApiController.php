@@ -31,20 +31,21 @@ class PomodoroSessionApiController extends AbstractController
             'sessionCount' => $pomodoroSession->getSessionCount(),
         ]);
     }
-    #[Route('/api/pomodoro-sessions', name: 'api_pomodoro_sessions_list', methods: ['GET'])]
-    public function list(): JsonResponse
-    {
-        $pomodoroSessions = $this->pomodoroSessionRepository->findAll();
 
-        $sessionsArray = [];
-        foreach ($pomodoroSessions as $pomodoroSession) {
-            $sessionsArray[] = [
+    #[Route('/api/pomodoro-sessions', name: 'api_pomodoro_sessions_list', methods: ['GET'])]
+    public function list(PomodoroSessionRepository $repository): JsonResponse
+    {
+        $pomodoroSessions = $repository->findAllWithUser();
+
+        $result = array_map(function ($pomodoroSession) {
+            return [
                 'sessionLength' => $pomodoroSession->getSessionLength(),
                 'breakLength' => $pomodoroSession->getBreakLength(),
                 'sessionCount' => $pomodoroSession->getSessionCount(),
+                'author' => $pomodoroSession->getAuthor() ? $pomodoroSession->getAuthor()->getUsername() : null,
             ];
-        }
+        }, $pomodoroSessions);
 
-        return $this->json($sessionsArray);
+        return $this->json($result);
     }
 }
