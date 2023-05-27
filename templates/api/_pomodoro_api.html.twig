@@ -1,0 +1,65 @@
+<script>
+$(document).ready(function() {
+  fetch('{{ path('api_pomodoro_sessions_list') }}')
+    .then(response => response.json())
+    .then(data => {
+      const sessionLength = 1 * 60;  // czas trwania sesji w sekundach
+      const breakLength = 1 * 60;      // czas trwania przerwy w sekundach
+      const sessionCount = 2;         // liczba sesji
+
+      let timeLeft = sessionLength;  // pozostały czas
+      let currentSession = 1;        // numer bieżącej sesji
+      let isSession = true;          // czy trwa sesja czy przerwa
+
+      let timerId = null;            // ID interwału
+
+      const countDown = () => {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const seconds = (timeLeft % 60).toString().padStart(2, '0');
+        $('#time').text(`${minutes}:${seconds}`);
+
+        if (timeLeft === 0) {
+          clearInterval(timerId);
+          if (isSession) {
+            isSession = false;
+            timeLeft = breakLength;
+            $('#status').text('Break Time!');
+          } else if (currentSession < sessionCount) {
+            currentSession++;
+            isSession = true;
+            timeLeft = sessionLength;
+            $('#status').text(`Session ${currentSession} of ${sessionCount}`);
+          } else {
+            $('#status').text('Pomodoro Completed!');
+          }
+          $('#start').prop('disabled', false);
+          $('#pause').prop('disabled', true);
+        }
+      };
+
+      $('#start').on('click', () => {
+        $('#start').prop('disabled', true);
+        $('#pause').prop('disabled', false);
+        timerId = setInterval(countDown, 1000);
+        $('#status').text(`Session ${currentSession} of ${sessionCount}`);
+      });
+
+      $('#pause').on('click', () => {
+        $('#start').prop('disabled', false);
+        $('#pause').prop('disabled', true);
+        clearInterval(timerId);
+      });
+    })
+    .catch(error => {
+      console.error('An error occurred while fetching the Pomodoro settings:', error);
+    });
+});
+</script>
+
+<div id="pomodoro">
+  <div id="status"></div>
+  <div id="time"></div>
+  <button id="start">Start</button>
+  <button id="pause" disabled>Pause</button>
+</div>

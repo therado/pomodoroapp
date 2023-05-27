@@ -5,8 +5,10 @@ namespace App\Form;
 use App\Entity\PomodoroSession;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -15,6 +17,19 @@ class PomodoroSessionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+    
+    ->add('title', TextType::class, [
+        'label' => 'Title',
+        'constraints' => [
+            new Length([
+                'min' => 5,
+                'max' => 40,
+                'minMessage' => 'Title must be at least {{ limit }} characters long',
+                'maxMessage' => 'Title cannot be longer than {{ limit }} characters'
+            ]),
+            new NotBlank()
+        ]
+    ])
     ->add('sessionLength', IntegerType::class, [
         'label' => 'Session Length',
         'constraints' => [

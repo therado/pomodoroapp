@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PomodoroSessionController!{% endblock %}
+
+{% block body %}
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="form-group mb-6">
+        {{ form_label(form.title, 'Enter the name of your session', {'label_attr': {'class': 'mb-2 font-bold text-lg text-gray-700'}} )}}
+            <div class="relative">
+                {{ form_widget(form.title, {'attr': {'class': 'form-input block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none', 'id': 'inputContact','placeholder': 'Title theme' }})}}
+            </div>
+        {{ form_errors(form.title)}}
+    </div>
+    <div class="form-group mb-6">
+        {{ form_label(form.sessionLength, 'How long should the session last', {'label_attr': {'class': 'mb-2 font-bold text-lg text-gray-700'}} )}}
+            <div class="relative">
+                {{ form_widget(form.sessionLength, {'attr': {'class': 'form-input block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none', 'id': 'inputContact','placeholder': 'Title theme' }})}}
+            </div>
+        {{ form_errors(form.sessionLength)}}
+    </div>
+    <div class="form-group mb-6">
+        {{ form_label(form.breakLength, 'How long should the break last', {'label_attr': {'class': 'mb-2 font-bold text-lg text-gray-700'}} )}}
+            <div class="relative">
+                {{ form_widget(form.breakLength, {'attr': {'class': 'form-input block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none', 'id': 'inputContact','placeholder': 'Title theme' }})}}
+            </div>
+        {{ form_errors(form.breakLength)}}
+    </div>
+    <div class="form-group mb-6">
+        {{ form_label(form.sessionCount, 'How many sessions should there be', {'label_attr': {'class': 'mb-2 font-bold text-lg text-gray-700'}} )}}
+            <div class="relative">
+                {{ form_widget(form.sessionCount, {'attr': {'class': 'form-input block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none', 'id': 'inputContact','placeholder': 'Title theme' }})}}
+            </div>
+        {{ form_errors(form.sessionCount)}}
+    </div>
+    <div>
+        <button class="relative inline-flex items-center justify-center p-0.5 mt-2 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 rounded-md group-hover:bg-opacity-0 dark:text-white">
+                Create a session 
+            </span>
+        </button>
+    </div>
+{{ form_end(form) }}
+{% endblock %}
