@@ -1,0 +1,109 @@
+<div>
+  <div class="flex flex-col justify-center items-center h-screen">
+    <div class="text-4xl font-bold mb-4" id="time">Session 1/{{ session.sessionCount }} </div>
+    <div class="mb-4">
+      <div id="progress" class="w-64 bg-gray-300 rounded-full">
+        <div id="progress-bar" class="h-4 bg-green-500 rounded-full"></div>
+      </div>
+    </div>
+    <div class="flex space-x-4">
+      <button class="bg-green-500 px-4 py-2 rounded-md text-white font-bold" id="start-button" onclick="start()">Start</button>
+      <button class="bg-red-500 px-4 py-2 rounded-md text-white font-bold hidden" id="pause-button" onclick="pause()">Pause</button>
+    </div>
+  </div>
+  <style>
+  body {
+  background-color: #f0f4f8;
+}
+
+#progress {
+  width: 14rem;
+}
+
+#progress-bar {
+  width: 0;
+  transition: width 1s linear;
+}
+
+  </style>
+  <script>
+  // 1. Utwórz zmienne globalne dla wartości `sessionLength`, `breakLength`i `sessionCount`
+  let sessionLength = {{session.sessionLength}};
+  let breakLength = {{session.breakLength}};
+  let sessionCount = {{session.sessionCount}};
+
+  // 2. Ustaw wartości początkowe zmiennych
+  let currentSession = 1;
+  let minutes = sessionLength;
+  let seconds = 0;
+  let isSession = true;
+  let isLastSession = false;
+
+  // 3. Ustaw funkcję, która oblicza czas.
+  function countdown() {
+    let timeElement = document.getElementById("time");
+
+    // ustawienie formatu czasu
+    let formattedMinutes = ("0" + minutes).slice(-2);
+    let formattedSeconds = ("0" + seconds).slice(-2);
+
+    // aktualizacja czasu wyświetlanego w elemencie html
+    if (isSession) {
+      timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
+    } else {
+      if (currentSession < sessionCount) {
+        timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
+      } else {
+        isLastSession = true;
+        timeElement.innerHTML = "End of Study!";
+      }
+    }
+
+    // sprawdź czy czas sesji/przerwy minął
+    if (minutes === 0 && seconds === 0) {
+      if (isSession) {
+        isSession = false;
+        if (currentSession < sessionCount) {
+          minutes = breakLength;
+          timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
+        } else {
+          isLastSession = true;
+          timeElement.innerHTML = "End of Study!";
+        }
+      } else {
+        currentSession++;
+        isSession = true;
+        minutes = sessionLength;
+        timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
+      }
+    }
+
+    // aktualizacja czasu
+    if (seconds === 0) {
+      seconds = 59;
+      minutes--;
+    } else {
+      seconds--;
+    }
+  }
+
+  // 4. Ustaw funkcję start, która będzie uruchamiała stoper i przydzielając mu wartość dla czasu sesji.
+  function start() {
+    let startButton = document.getElementById("start-button");
+    let pauseButton = document.getElementById("pause-button");
+    startButton.style.display = "none";
+    pauseButton.style.display = "block";
+    countdown();
+    timer = setInterval(countdown, 1000);
+  }
+
+  // 5. Ustaw funkcję pauzującą, która zatrzymuje stoper.
+  function pause() {
+    let startButton = document.getElementById("start-button");
+    let pauseButton = document.getElementById("pause-button");
+    startButton.style.display = "block";
+    pauseButton.style.display = "none";
+    clearInterval(timer);
+  }
+  </script>
+</div>

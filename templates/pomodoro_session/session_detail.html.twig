@@ -3,15 +3,14 @@
 {% block title %}{{ session.title }} | My Pomodoro Session{% endblock %}
 
 {% block body %}
-    <h1>{{ session.title }}</h1>
-    <p>
-        Created: {{ session.created | date('H:i:s Y-m-d ') }}<br>
-        Author: {{ session.author.username }}<br>
-        Duration: {{ session.sessionCount }} minutes<br>
-    </p>
-    
-    {# Render form to edit session data if current user is author of the session#}
-    {% if is_granted('ROLE_USER') and session.author == app.user %}
-        <a href="#">Edit session</a>
-    {% endif %}
+{% if is_granted('ROLE_USER') and session.author == app.user %}
+{{ include('home/_navbar.html.twig') }}
+{{ include('pomodoro_session/_configuration_info.html.twig') }}
+{{ include('pomodoro_session/_timer.html.twig') }}
+{{ include('pomodoro_session/_current_session.html.twig') }}
+
+
+{% else %}
+ERROR
+{% endif %}
 {% endblock %}

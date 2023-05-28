@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\PomodoroSession;
 use App\Repository\PomodoroSessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[Route('/api/pomodoro-sessions')]
 class PomodoroSessionApiController extends AbstractController
