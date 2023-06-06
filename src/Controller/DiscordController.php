@@ -43,25 +43,34 @@ class DiscordController extends AbstractController
         if (!$accessToken) {
             return $this->render('discord/check.html.twig');
         }
+    
         $discordUser = $this->discordApiService->fetchUser($accessToken);
         $user = $userRepository->findOneBy(['discordId' => $discordUser->id]);
-
+    
         if ($user) {
+            if ($user->getAccessToken() !== $accessToken || $user->getAvatar() !== $discordUser->avatar) {
+                $user->setAccessToken($accessToken);
+                $user->setAvatar($discordUser->avatar);
+                $em->persist($user);
+                $em->flush();
+            }
+    
             return $this->redirectToRoute('app_discord_auth', [
                 'accessToken' => $accessToken
             ]);
         }
+    
         $user = new User();
-
+    
         $user->setAccessToken($accessToken);
         $user->setUsername($discordUser->username);
         $user->setEmail($discordUser->email);
         $user->setAvatar($discordUser->avatar);
         $user->setDiscordId($discordUser->id);
-
+    
         $em->persist($user);
         $em->flush();
-        
+    
         return $this->redirectToRoute('app_discord_auth', [
             'accessToken' => $accessToken
         ]);
