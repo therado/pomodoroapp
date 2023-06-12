@@ -1,8 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Sessions{% endblock %}
+{% block title %}PomodoroApp - My Sessions{% endblock %}
 
 {% block body %}
-{{ include('home/_navbar.html.twig') }}
-{{ include('pomodoro_session/_list_sessions.html.twig') }}
+{{ include('pomodoro_session/session_functions/_list_sessions.html.twig') }}
 {% endblock %}

@@ -11,8 +11,27 @@
         {% block javascripts %}{% endblock %}
     </head>
     <body>
+        <nav class="w-full md:w-2/3 mx-auto mb-4 flex justify-between items-center p-4 bg-white shadow-md">
+            <a href="{{ path('app_home') }}">
+                <div class="flex items-center">
+                    <img src="https://d1nhio0ox7pgb.cloudfront.net/_img/o_collection_png/green_dark_grey/512x512/plain/clock.png" alt="Logo" class="w-8 h-8 mr-3 -ml-2">
+                    <span class="text-lg font-medium text-gray-900">POMODORO APP</span>
+                </div>
+            </a>
+
+            <div class="flex items-center">
+                <a href="{{ path('app_home') }}" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Home</a>
+                <a href="{{ path('app_session_create') }}" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Create Session</a>
+                <a href="{{ path('app_pomodoro_sessions') }}" class="mr-4 text-sm text-gray-600 hover:text-gray-900">My Sessions</a>
+                <a href="{{ path('app_contact') }}" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Contact</a>
+                <div class="relative">
+                <button type="button" class="flex items-center focus:outline-none">
+                    <img src="{{ app.user.avatarUrl }}" alt="Avatar" class="w-6 h-6 rounded-full">
+                </button>
+                </div>
+            </div>
+        </nav>
         {% block body %}
-        
         {% endblock %}
     </body>
 </html>

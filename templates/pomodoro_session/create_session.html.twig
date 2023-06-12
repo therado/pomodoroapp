@@ -1,9 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PomodoroSessionController!{% endblock %}
+{% block title %}PomodoroApp - Create Session{% endblock %}
 
 {% block body %}
-{{ include('home/_navbar.html.twig') }}
-{{ include('pomodoro_session/_session_form.html.twig') }}
+{{ include('pomodoro_session/creation_functions/_session_form.html.twig') }}
 
 {% endblock %}

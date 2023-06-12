@@ -1,15 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ session.title }} | My Pomodoro Session{% endblock %}
+{% block title %}PomodoroApp -  {{ session.title }}{% endblock %}
 
 {% block body %}
 {% if is_granted('ROLE_USER') and session.author == app.user %}
-{{ include('home/_navbar.html.twig') }}
-{{ include('pomodoro_session/_configuration_info.html.twig') }}
-{{ include('pomodoro_session/_timer.html.twig') }}
-{{ include('pomodoro_session/_current_session.html.twig') }}
-
-
+{{ include('pomodoro_session/session_functions/_configuration_info.html.twig') }}
+{{ include('pomodoro_session/session_functions/_timer.html.twig') }}
 {% else %}
 ERROR
 {% endif %}
