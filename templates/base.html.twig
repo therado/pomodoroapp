@@ -25,9 +25,11 @@
                 <a href="{{ path('app_pomodoro_sessions') }}" class="mr-4 text-sm text-gray-600 hover:text-gray-900">My Sessions</a>
                 <a href="{{ path('app_contact') }}" class="mr-4 text-sm text-gray-600 hover:text-gray-900">Contact</a>
                 <div class="relative">
-                <button type="button" class="flex items-center focus:outline-none">
-                    <img src="{{ app.user.avatarUrl }}" alt="Avatar" class="w-6 h-6 rounded-full">
-                </button>
+                {% if app.user %}
+                    <button type="button" class="flex items-center focus:outline-none">
+                        <img src="{{ app.user.avatarUrl }}" alt="Avatar" class="w-6 h-6 rounded-full">
+                    </button>
+                {% endif %}
                 </div>
             </div>
         </nav>
