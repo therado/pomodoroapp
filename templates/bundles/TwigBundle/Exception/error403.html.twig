@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="w-full md:w-2/3 mx-auto mb-4 flex flex-col justify-center items-center p-4 bg-white shadow-md">
+        <h1 class="text-center pt-5 pb-2">ERROR {{ status_code }}</h1>
+        <p class="text-center">{{ status_text }}</p>
+        <div class="text-center py-3">
+            <a class="btn btn-primary" href="{{ path('app_home') }}">Please go back to the home page</a>
+        </div>
+    </div>
+{% endblock %}

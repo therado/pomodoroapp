@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\PomodoroSession;
 use App\Form\PomodoroSessionType;
-use App\Repository\PomodoroSessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,9 +16,13 @@ class PomodoroSessionController extends AbstractController
     #[Route('/pomodoro/sessions', name: 'app_pomodoro_sessions')]
     public function showMySessions(EntityManagerInterface $entityManager, Security $security): Response
     {
-        $user = $security->getUser();
+        // Check if user is authenticated
+        if (!$security->getUser()) {
+            return $this->redirectToRoute('app_home');
+        }
         
-        $sessions = $entityManager->getRepository(PomodoroSession::class)->findBy(['author' => $user]);
+        // Retrieve sessions created by the logged-in user
+        $sessions = $entityManager->getRepository(PomodoroSession::class)->findBy(['author' => $security->getUser()]);
         
         return $this->render('pomodoro_session/index.html.twig', [
             'sessions' => $sessions,
@@ -32,17 +35,15 @@ class PomodoroSessionController extends AbstractController
         EntityManagerInterface $entityManager,
         Security $security
     ): Response {
-        $session = $entityManager
-            ->getRepository(PomodoroSession::class)
-            ->find($id);
+        // Retrieve the PomodoroSession specified by the id
+        $session = $entityManager->getRepository(PomodoroSession::class)->find($id);
 
         if (!$session) {
             throw $this->createNotFoundException('Session not found');
         }
 
         // Check if the currently logged-in user is the author of the PomodoroSession
-        $currentUser = $security->getUser();
-        if ($currentUser !== $session->getAuthor()) {
+        if ($security->getUser() !== $session->getAuthor()) {
             $this->addFlash('error', 'Nie masz uprawnień, aby wyświetlić tę sesję pomodoro!');
 
             return $this->redirectToRoute('app_home');
@@ -56,10 +57,9 @@ class PomodoroSessionController extends AbstractController
     #[Route('/session/create', name: 'app_session_create')]
     public function createSession(
         Request $request,
-        PomodoroSessionRepository $session
+        EntityManagerInterface $entityManager
     ): Response {
-
-        //Check if user is authenticated
+        // Check if user is authenticated
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
@@ -72,9 +72,13 @@ class PomodoroSessionController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $sessionForm = $form->getData();
+            
+            // Set the author to the logged-in user and the creation date to the current date
             $sessionForm->setAuthor($this->getUser());
             $sessionForm->setCreated(new \DateTimeImmutable());
-            $session->save($sessionForm, true);
+            
+            $entityManager->persist($sessionForm);
+            $entityManager->flush();
 
             $this->addFlash('success', 'Your session has been created');
             return $this->redirectToRoute('app_home');
