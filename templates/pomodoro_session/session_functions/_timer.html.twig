@@ -1,7 +1,7 @@
 <div class="w-full md:w-2/3 mx-auto mb-20 flex justify-between items-center p-2 bg-white shadow-md">
 
     <!-- Timer -->
-    <div class="w-2/5">
+    <div class="w-max">
         <div>
             <h1 class="text-center font-bold text-lg mb-2 " id="time">Session 1/{{ session.sessionCount }}  </h1>
         </div>
@@ -12,113 +12,114 @@
         </div>
     </div>
 
-
-    <!-- Tasks -->
-    <div class="w-3/5">
-        <div>
-            <h1 class="text-center font-bold text-lg mb-2">TEST</h1>
-        </div>
-       
-        <div class="flex justify-center space-x-4">
-            <p>TESS </br></p>
-            <p>TESS </br></p>
-            <p>TESS </br></p>
-        </div>
-    </div>
-
-
     <script>
-            // 1. Utwórz zmienne globalne dla wartości `sessionLength`, `breakLength`, `sessionCount` i `timer`
-            let sessionLength = {{session.sessionLength}};
-            let breakLength = {{session.breakLength}};
-            let sessionCount = {{session.sessionCount}};
-            let timer;
+// Pobierz wartości konfiguracyjne z obiektu session
+let sessionLength = {{session.sessionLength}};
+let breakLength = {{session.breakLength}};
+let sessionCount = {{session.sessionCount}};    
 
-            // 2. Ustaw wartości początkowe zmiennych
-            let currentSession = 1;
-            let minutes = sessionLength;
-            let seconds = 0;
-            let isSession = true;
-            let isLastSession = false;
+// Ustaw wartości początkowe zmiennych
+let currentSession = 1;
+let minutes = sessionLength;
+let seconds = 0;
+let isSession = true;
+let isLastSession = false;
+let timer;
 
-            // 3. Ustaw funkcję, która oblicza czas.
-            function countdown() {
-                let timeElement = document.getElementById("time");
+// Funkcja, która oblicza czas
+function countdown() {
+    let timeElement = document.getElementById("time");
 
-                // ustawienie formatu czasu
-                let formattedMinutes = ("0" + minutes).slice(-2);
-                let formattedSeconds = ("0" + seconds).slice(-2);
+    // Ustawienie formatu czasu
+    let formattedMinutes = ("0" + minutes).slice(-2);
+    let formattedSeconds = ("0" + seconds).slice(-2);
 
-                // aktualizacja czasu wyświetlanego w elemencie html
-                if (isSession) {
-                timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
-                } else {
-                if (currentSession < sessionCount) {
-                    timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
-                } else {
-                    isLastSession = true;
-                    timeElement.innerHTML = "End of Study!";
-                    let endButton = document.getElementById("end-button");
-                    endButton.style.display = "block";
-                }
-                }
+    // Aktualizacja czasu wyświetlanego w elemencie HTML
+    if (isSession) {
+        timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
+    } else {
+        if (currentSession < sessionCount) {
+            timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
+        } else {
+            isLastSession = true;
+            timeElement.innerHTML = "End of Study!";
+            let endButton = document.getElementById("end-button");
+            endButton.style.display = "block";
+        }
+    }
 
-                // sprawdź czy czas sesji/przerwy minął
-                if (minutes === 0 && seconds === 0) {
-                if (isSession) {
-                    isSession = false;
-                    if (currentSession < sessionCount) {
-                    minutes = breakLength;
-                    timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
-                    } else {
-                    isLastSession = true;
-                    timeElement.innerHTML = "End of Study!";
-                    let endButton = document.getElementById("end-button");
-                    endButton.style.display = "block";
-                    }
-                } else {
-                    currentSession++;
-                    isSession = true;
-                    minutes = sessionLength;
-                    timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
-                }
-                }
-
-                // aktualizacja czasu
-                if (seconds === 0) {
-                seconds = 59;
-                minutes--;
-                } else {
-                seconds--;
-                }
-            }
-
-            // 4. Ustaw funkcję start, która będzie uruchamiała stoper i przydzielając mu wartość dla czasu sesji.
-            function start() {
-                let startButton = document.getElementById("start-button");
-                let pauseButton = document.getElementById("pause-button");
-                startButton.style.display = "none";
-                pauseButton.style.display = "block";
-                countdown();
-                timer = setInterval(countdown, 1000);
-            }
-
-            // 5. Ustaw funkcję pauzującą, która zatrzymuje stoper.
-            function pause() {
-                let startButton = document.getElementById("start-button");
-                let pauseButton = document.getElementById("pause-button");
-                startButton.style.display = "block";
-                pauseButton.style.display = "none";
-                clearInterval(timer);
-            }
-
-            // 6. Ustaw funkcję kończącą sesję, która zatrzyma stoper i wyświetli przycisk End Session.
-            function endSession() {
-                clearInterval(timer);
+    // Sprawdzenie, czy czas sesji/przerwy minął
+    if (minutes === 0 && seconds === 0) {
+        if (isSession) {
+            isSession = false;
+            if (currentSession < sessionCount) {
+                minutes = breakLength;
+                timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
+            } else {
+                isLastSession = true;
+                timeElement.innerHTML = "End of Study!";
                 let endButton = document.getElementById("end-button");
                 endButton.style.display = "block";
-
             }
+        } else {
+            currentSession++;
+            isSession = true;
+            minutes = sessionLength;
+            timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
+        }
+    }
 
+    // Aktualizacja czasu
+    if (seconds === 0) {
+        seconds = 59;
+        minutes--;
+    } else {
+        seconds--;
+    }
+}
+
+// Funkcja startująca stoper
+function start() {
+    let startButton = document.getElementById("start-button");
+    let pauseButton = document.getElementById("pause-button");
+    startButton.style.display = "none";
+    pauseButton.style.display = "block";
+    countdown();
+    timer = setInterval(countdown, 1000);
+}
+
+// Funkcja pauzująca stoper
+function pause() {
+    let startButton = document.getElementById("start-button");
+    let pauseButton = document.getElementById("pause-button");
+    startButton.style.display = "block";
+    pauseButton.style.display = "none";
+    clearInterval(timer);
+}
+
+// Funkcja kończąca sesję
+function endSession() {
+    clearInterval(timer);
+    let endButton = document.getElementById("end-button");
+    endButton.style.display = "block";
+
+    // Dodaj kod AJAX, który wyśle żądanie DELETE do kontrolera usuwającego sesję z bazy danych
+    let sessionId = {{ session.id }};
+    fetch(`/pomodoro/session/${sessionId}/delete`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
     </script>
 </div>

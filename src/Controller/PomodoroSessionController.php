@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\PomodoroSession;
 use App\Form\PomodoroSessionType;
+use App\Repository\PomodoroSessionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,6 +56,35 @@ class PomodoroSessionController extends AbstractController
         ]);
     }
 
+    #[Route('/pomodoro/session/{id}/delete', name: 'app_pomodoro_session_delete')]
+    public function deleteSession(
+        int $id,
+        EntityManagerInterface $entityManager,
+        Security $security
+    ): Response {
+        // Retrieve the PomodoroSession specified by the id
+        $session = $entityManager->getRepository(PomodoroSession::class)->find($id);
+    
+        if (!$session) {
+            throw $this->createNotFoundException('Session not found');
+        }
+    
+        // Check if the currently logged-in user is the author of the PomodoroSession
+        if ($security->getUser() !== $session->getAuthor()) {
+            $this->addFlash('error', 'Nie masz uprawnień, aby usunąć tę sesję pomodoro!');
+    
+            return $this->redirectToRoute('app_home');
+        }
+    
+        // Remove the PomodoroSession from the database
+        $entityManager->remove($session);
+        $entityManager->flush();
+    
+        $this->addFlash('success', 'Sesja pomodoro została usunięta.');
+    
+        return $this->redirectToRoute('app_home');
+    }
+
     #[Route('/session/create', name: 'app_session_create')]
     public function createSession(
         Request $request,
@@ -91,4 +122,32 @@ class PomodoroSessionController extends AbstractController
         ]
         );
     }
+
+    #[Route('/test/timer', name: 'app_test_timer')]
+    public function index(): Response
+    {
+        return $this->render('pomodoro_session/test.html.twig');
+    }
+    
+    #[Route('/restfulapi/export', name: 'app_restfulapi')]
+    public function jsonExport(PomodoroSessionRepository $repository): JsonResponse
+    {
+        $sessions = $repository->findAll();
+
+        $data = [];
+
+        foreach ($sessions as $session) {
+            $data[] = [
+                'author' => $session->getAuthor(),
+                'sessionLength' => $session->getSessionLength(),
+                'breakLength' => $session->getBreakLength(),
+                'sessionCount' => $session->getSessionCount(),
+            ];
+        }
+
+        $json = json_encode($data);
+
+        return new JsonResponse($json, 200, [], true);
+    }
 }
+
