@@ -1,59 +1,47 @@
-<div class="w-full md:w-2/3 mx-auto mb-20 flex justify-between items-center p-2 bg-white shadow-md">
-
-    <!-- Timer -->
-    <div class="w-max">
-        <div>
-            <h1 class="text-center font-bold text-lg mb-2 " id="time">Session 1/{{ session.sessionCount }}  </h1>
-        </div>
-        <div class="flex justify-center space-x-4">
-            <button class="bg-green-500 px-1 py-1 rounded-md text-white font-bold" id="start-button" onclick="start()">Start</button>
-            <button class="bg-red-500 px-1 py-1 rounded-md text-white font-bold hidden" id="pause-button" onclick="pause()">Pause</button>
-            <button class="bg-blue-500 px-1 py-1 rounded-md text-white font-bold hidden" id="end-button" onclick="endSession()">End Session</button>
+<div class="w-full mx-auto mb-20 flex flex-col items-center justify-center p-2 bg-white shadow-md">
+    
+    <h1 class="text-4xl font-bold mb-4">Pomodoro Clock</h1>
+    <p id="sessionPhase" class="text-xl font-bold mb-2"></p>
+    <div class="flex flex-col items-center justify-center w-60 h-60 relative">
+        <div id="progress" class="absolute top-0 left-0 w-full h-full rounded-full bg-blue-300"></div>
+        <div class="absolute top-0 left-0 w-full h-full rounded-full flex items-center justify-center">
+            <h1 class="text-3xl font-bold text-black text-center " id="time">Session 1/{{ session.sessionCount }}  </h1>
         </div>
     </div>
+    <div class="flex mt-4">
+        <button class="bg-green-500 px-1 py-1 rounded-md text-white font-bold" id="start-button" onclick="start()">Start</button>
+        <button class="bg-red-500 px-1 py-1 rounded-md text-white font-bold hidden" id="pause-button" onclick="pause()">Pause</button>
+        <button class="bg-blue-500 px-1 py-1 rounded-md text-white font-bold hidden" id="end-button" onclick="endSession()">End Session</button>
+    </div>
+</div>
 
-    <script>
-// Pobierz wartości konfiguracyjne z obiektu session
-let sessionLength = {{session.sessionLength}};
-let breakLength = {{session.breakLength}};
-let sessionCount = {{session.sessionCount}};    
+<script>
+    // Pobierz wartości konfiguracyjne z obiektu session
+    let sessionLength = {{session.sessionLength}};
+    let breakLength = {{session.breakLength}};
+    let sessionCount = {{session.sessionCount}};    
 
-// Ustaw wartości początkowe zmiennych
-let currentSession = 1;
-let minutes = sessionLength;
-let seconds = 0;
-let isSession = true;
-let isLastSession = false;
-let timer;
+    // Ustaw wartości początkowe zmiennych
+    let currentSession = 1;
+    let minutes = sessionLength;
+    let seconds = 0;
+    let isSession = true;
+    let isLastSession = false;
+    let timer;
 
-// Funkcja, która oblicza czas
-function countdown() {
-    let timeElement = document.getElementById("time");
+    // Funkcja, która oblicza czas
+    function countdown() {
+        let timeElement = document.getElementById("time");
 
-    // Ustawienie formatu czasu
-    let formattedMinutes = ("0" + minutes).slice(-2);
-    let formattedSeconds = ("0" + seconds).slice(-2);
+        // Ustawienie formatu czasu
+        let formattedMinutes = ("0" + minutes).slice(-2);
+        let formattedSeconds = ("0" + seconds).slice(-2);
 
-    // Aktualizacja czasu wyświetlanego w elemencie HTML
-    if (isSession) {
-        timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
-    } else {
-        if (currentSession < sessionCount) {
-            timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
-        } else {
-            isLastSession = true;
-            timeElement.innerHTML = "End of Study!";
-            let endButton = document.getElementById("end-button");
-            endButton.style.display = "block";
-        }
-    }
-
-    // Sprawdzenie, czy czas sesji/przerwy minął
-    if (minutes === 0 && seconds === 0) {
+        // Aktualizacja czasu wyświetlanego w elemencie HTML
         if (isSession) {
-            isSession = false;
+            timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " " + formattedMinutes + ":" + formattedSeconds;
+        } else {
             if (currentSession < sessionCount) {
-                minutes = breakLength;
                 timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
             } else {
                 isLastSession = true;
@@ -61,65 +49,81 @@ function countdown() {
                 let endButton = document.getElementById("end-button");
                 endButton.style.display = "block";
             }
+        }
+
+        // Sprawdzenie, czy czas sesji/przerwy minął
+        if (minutes === 0 && seconds === 0) {
+            if (isSession) {
+                isSession = false;
+                if (currentSession < sessionCount) {
+                    minutes = breakLength;
+                    timeElement.innerHTML = "Break - " + formattedMinutes + ":" + formattedSeconds + " left";
+                } else {
+                    isLastSession = true;
+                    timeElement.innerHTML = "End of Study!";
+                    let endButton = document.getElementById("end-button");
+                    endButton.style.display = "block";
+                }
+            } else {
+                currentSession++;
+                isSession = true;
+                minutes = sessionLength;
+                timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
+            }
+        }
+
+        // Aktualizacja czasu
+        if (seconds === 0) {
+            seconds = 59;
+            minutes--;
         } else {
-            currentSession++;
-            isSession = true;
-            minutes = sessionLength;
-            timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " - " + formattedMinutes + ":" + formattedSeconds;
+            seconds--;
         }
     }
 
-    // Aktualizacja czasu
-    if (seconds === 0) {
-        seconds = 59;
-        minutes--;
-    } else {
-        seconds--;
+    // Funkcja startująca stoper
+    function start() {
+        let startButton = document.getElementById("start-button");
+        let pauseButton = document.getElementById("pause-button");
+        startButton.style.display = "none";
+        pauseButton.style.display = "block";
+        countdown();
+        timer = setInterval(countdown, 1000);
     }
-}
 
-// Funkcja startująca stoper
-function start() {
-    let startButton = document.getElementById("start-button");
-    let pauseButton = document.getElementById("pause-button");
-    startButton.style.display = "none";
-    pauseButton.style.display = "block";
-    countdown();
-    timer = setInterval(countdown, 1000);
-}
+    // Funkcja pauzująca stoper
+    function pause() {
+        let startButton = document.getElementById("start-button");
+        let pauseButton = document.getElementById("pause-button");
+        startButton.style.display = "block";
+        pauseButton.style.display = "none";
+        clearInterval(timer);
+    }
 
-// Funkcja pauzująca stoper
-function pause() {
-    let startButton = document.getElementById("start-button");
-    let pauseButton = document.getElementById("pause-button");
-    startButton.style.display = "block";
-    pauseButton.style.display = "none";
-    clearInterval(timer);
-}
-
-// Funkcja kończąca sesję
+    // Funkcja kończąca sesję
 function endSession() {
     clearInterval(timer);
     let endButton = document.getElementById("end-button");
     endButton.style.display = "block";
 
-    // Dodaj kod AJAX, który wyśle żądanie DELETE do kontrolera usuwającego sesję z bazy danych
-    let sessionId = {{ session.id }};
-    fetch(`/pomodoro/session/${sessionId}/delete`, {
-        method: 'DELETE',
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-    });
+    // Zresetowanie czasu i wartości zmiennych
+    currentSession = 1;
+    minutes = sessionLength;
+    seconds = 0;
+    isSession = true;
+    isLastSession = false;
+
+    // Wyświetlenie pierwszej sesji
+    let timeElement = document.getElementById("time");
+    let formattedMinutes = ("0" + minutes).slice(-2);
+    let formattedSeconds = ("0" + seconds).slice(-2);
+    timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " " + formattedMinutes + ":" + formattedSeconds;
+
+    // Ukrycie przycisku "End Session"
+    endButton.style.display = "none";
+
+    // Włączenie przycisku "Start"
+    let startButton = document.getElementById("start-button");
+    startButton.style.display = "block";
 }
-    </script>
-</div>
+</script>

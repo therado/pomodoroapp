@@ -122,12 +122,6 @@ class PomodoroSessionController extends AbstractController
         ]
         );
     }
-
-    #[Route('/test/timer', name: 'app_test_timer')]
-    public function index(): Response
-    {
-        return $this->render('pomodoro_session/test.html.twig');
-    }
     
     #[Route('/restfulapi/export', name: 'app_restfulapi')]
     public function jsonExport(PomodoroSessionRepository $repository): JsonResponse
