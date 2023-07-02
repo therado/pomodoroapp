@@ -1,17 +1,27 @@
-<div class="w-full mx-auto mb-20 flex flex-col items-center justify-center p-2 bg-white shadow-md">
-    
-    <h1 class="text-4xl font-bold mb-4">Pomodoro Clock</h1>
-    <p id="sessionPhase" class="text-xl font-bold mb-2"></p>
-    <div class="flex flex-col items-center justify-center w-60 h-60 relative">
-        <div id="progress" class="absolute top-0 left-0 w-full h-full rounded-full bg-blue-300"></div>
-        <div class="absolute top-0 left-0 w-full h-full rounded-full flex items-center justify-center">
-            <h1 class="text-3xl font-bold text-black text-center " id="time">Session 1/{{ session.sessionCount }}  </h1>
+<div class="w-full md:w-2/3 mx-auto mb-4 flex justify-between items-center p-4 bg-white shadow-md">
+    <div class="w-2/5">
+        <div class="flex flex-col items-center justify-center">
+            <h1 class="text-4xl font-bold mb-4">Pomodoro Clock</h1>
+            <p id="sessionPhase" class="text-xl font-bold mb-2"></p>
+            <div class="flex flex-col items-center justify-center w-60 h-60 relative">
+                <div id="progress" class="absolute top-0 left-0 w-full h-full rounded-full"></div>
+                <div class="absolute top-0 left-0 w-full h-full rounded-full flex items-center justify-center border-4 border-red-500">
+                    <h1 class="text-3xl font-bold text-black text-center" id="time">Session 1/{{ session.sessionCount }}</h1>
+                </div>
+            </div>
+            <div class="flex justify-center mt-5">
+                <button class="bg-green-500 px-1 py-1 rounded-md text-white font-bold" id="start-button" onclick="start()">Start</button>
+                <button class="bg-red-500 px-1 py-1 rounded-md text-white font-bold hidden" id="pause-button" onclick="pause()">Pause</button>
+                <button class="bg-blue-500 px-1 py-1 rounded-md text-white font-bold hidden" id="end-button" onclick="endSession()">End Session</button>
+            </div>
         </div>
     </div>
-    <div class="flex mt-4">
-        <button class="bg-green-500 px-1 py-1 rounded-md text-white font-bold" id="start-button" onclick="start()">Start</button>
-        <button class="bg-red-500 px-1 py-1 rounded-md text-white font-bold hidden" id="pause-button" onclick="pause()">Pause</button>
-        <button class="bg-blue-500 px-1 py-1 rounded-md text-white font-bold hidden" id="end-button" onclick="endSession()">End Session</button>
+    <div class="w-3/5">
+        <div class="flex flex-col items-center justify-center">
+            <h1 class="text-4xl font-bold mb-4">ZADANIA</h1>
+            <h1 class="text-4xl font-bold mb-4">Pomodoro Clock</h1>
+            <h1 class="text-4xl font-bold mb-4">Pomodoro Clock</h1>
+        </div>
     </div>
 </div>
 
@@ -28,6 +38,7 @@
     let isSession = true;
     let isLastSession = false;
     let timer;
+
 
     // Funkcja, która oblicza czas
     function countdown() {
@@ -79,6 +90,11 @@
         } else {
             seconds--;
         }
+        // Ukrywanie przycisku gdy jest ostatnia sesji i gdy jest do konca mniej niz 30 sekund
+        let pauseButton = document.getElementById("pause-button");
+        if (sessionCount === currentSession && minutes === 0 && seconds < 30) {
+            pauseButton.style.display = "none";
+        }
     }
 
     // Funkcja startująca stoper
@@ -101,29 +117,11 @@
     }
 
     // Funkcja kończąca sesję
-function endSession() {
-    clearInterval(timer);
-    let endButton = document.getElementById("end-button");
-    endButton.style.display = "block";
+    function endSession() {
+        let endButton = document.getElementById("end-button");
+        endButton.style.display = "none";
 
-    // Zresetowanie czasu i wartości zmiennych
-    currentSession = 1;
-    minutes = sessionLength;
-    seconds = 0;
-    isSession = true;
-    isLastSession = false;
-
-    // Wyświetlenie pierwszej sesji
-    let timeElement = document.getElementById("time");
-    let formattedMinutes = ("0" + minutes).slice(-2);
-    let formattedSeconds = ("0" + seconds).slice(-2);
-    timeElement.innerHTML = "Session " + currentSession + "/" + sessionCount + " " + formattedMinutes + ":" + formattedSeconds;
-
-    // Ukrycie przycisku "End Session"
-    endButton.style.display = "none";
-
-    // Włączenie przycisku "Start"
-    let startButton = document.getElementById("start-button");
-    startButton.style.display = "block";
-}
+        // Przekierowanie na stronę app-home
+        window.location.href = "/"; // Zmieniono ścieżkę przekierowania na "/"
+    }
 </script>

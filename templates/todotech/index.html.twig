@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TO DO{% endblock %}
+
+{% block body %}
+<section class="w-full md:w-2/3 mx-auto mb-4 flex justify-between p-4 bg-white shadow-md">
+  <h1>Dokumentacja techniczna</h1>
+
+  <h2>Baza danych sesji Pomodoro</h2>
+  <p>
+    Baza danych sesji Pomodoro jest odpowiedzialna za przechowywanie informacji dotyczących sesji nauki z wykorzystaniem techniki Pomodoro. W bazie danych będziemy przechowywać następujące informacje:
+  </p>
+  <ul>
+    <li><strong>session_id</strong> (int): unikalny identyfikator sesji nauki</li>
+    <li><strong>user_id</strong> (int): identyfikator użytkownika, do którego przypisana jest sesja</li>
+    <li><strong>is_finished</strong> (bool): flaga określająca, czy sesja została zakończona (wartość domyślna: false)</li>
+    <li><strong>czas_trwania</strong> (int): czas trwania sesji, wyrażony w minutach (dodawane tylko w przypadku, gdy sesja zostanie zakończona)</li>
+    <li><strong>data_rozpoczecia</strong> (datetime): data i czas rozpoczęcia sesji</li>
+    <li><strong>data_zakonczenia</strong> (datetime): data i czas zakończenia sesji</li>
+    <li><strong>statystyki_nauki</strong> (text): tekstowe informacje o statystykach nauki przypisane do konta użytkownika</li>
+  </ul>
+
+  <h2>Rozszerzenie bazy danych sesji Pomodoro</h2>
+  <p>
+    Aby rozszerzyć bazę danych sesji Pomodoro, dodamy następujące pole:
+  </p>
+  <ul>
+    <li><strong>is_finished</strong> (bool): flaga określająca, czy sesja została zakończona (wartość domyślna: false). Jeśli sesja zostanie zakończona, ta flaga zostanie ustawiona na true.</li>
+    <li><strong>czas_trwania</strong> (int): czas trwania sesji, wyrażony w minutach. Pole to będzie dodawane tylko w przypadku, gdy sesja zostanie zakończona, a jego wartość będzie określać ile czasu użytkownik spędził na danej sesji.</li>
+  </ul>
+
+  <h2>Baza danych zadań dla sesji nauki</h2>
+  <p>
+    Baza danych zadań dla sesji nauki przechowuje informacje dotyczące zadań, które użytkownik chce wykonać w ramach danej sesji nauki. Baza danych będzie zawierać następujące pola:
+  </p>
+  <ul>
+    <li><strong>task_id</strong> (int): unikalny identyfikator zadania</li>
+    <li><strong>session_id</strong> (int): identyfikator sesji, do której przypisane jest zadanie</li>
+    <li><strong>opis</strong> (text): opis zadania</li>
+  </ul>
+
+  <h2>Baza danych profili użytkowników</h2>
+  <p>
+    Baza danych profili użytkowników jest odpowiedzialna za przechowywanie informacji o profilach użytkowników. Każdy użytkownik będzie miał swój profil, który zawiera podstawowe dane i informacje. Baza danych zawierać będzie następujące pola:
+  </p>
+  
+  <p>
+    Powyższe informacje stanowią podstawę dla bazy danych sesji Pomodoro, bazy danych zadań dla sesji nauki oraz bazy danych profili użytkowników. Dodatkowo, można oczywiście rozszerzyć te bazy o dodatkowe pola i funkcjonalności, w zależności od potrzeb i wymagań aplikacji.
+  </p>
+</section>
+{% endblock %}
